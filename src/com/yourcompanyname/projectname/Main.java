@@ -266,6 +266,7 @@ public class Main
                 }
             }else if ( arg.equalsIgnoreCase("-appid") || arg.equalsIgnoreCase("--appid") || arg.equalsIgnoreCase("-application-identifier") || arg.equalsIgnoreCase("--application-identifier") ){
                 printApplicationIdentifier();
+                System.exit(0);
             }else{
                 _logger.warn("Unrecognized option: \""+arg+"\". Ignoring");
             }
