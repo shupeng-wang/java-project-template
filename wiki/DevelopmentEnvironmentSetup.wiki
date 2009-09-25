@@ -1,0 +1,8 @@
+#summary Details for setting up your development environment.
+
+= Development Environment =
+This project template should work on any system that has Sun Java JDK 6, Apache Maven2, and GNU Make properly installed and configured. That said, differences between development environments can lead to unexpected or unusual failures. Or, it is possible that you or one of the developers on your team is having difficulty in installing and configuring these tools. In such a case, please try setting up your development environment according to the following documents:
+
+ * [http://sites.google.com/site/michaelsafyan/coding/java/setup/windows Java Setup on Windows]
+ * [http://sites.google.com/site/michaelsafyan/coding/java/setup/mac-os-x Java Setup on Mac OS X]
+ * [http://sites.google.com/site/michaelsafyan/coding/java/setup/ubuntu Java Setup on Ubuntu Linux]
