@@ -1,8 +1,13 @@
 // <Your Company Name>; Copyright (C) <Year(S)>; All rights reserved.
 package com.yourcompanyname.projectname;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.io.File;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -16,6 +21,41 @@ import org.apache.log4j.PatternLayout;
  */
 public class Main
 {
+    /**
+     * Runs the project in interactive mode.
+     */
+    public static void interactiveMain(){
+        System.out.println("Hello world!");
+    }
+    
+    /**
+     * Runs the project in commandline mode.
+     */
+    public static void commandlineMain(){
+        System.out.println("Hello world!");
+    }
+    
+    /**
+     * Runs the project in graphical mode.
+     */
+    public static void graphicalMain(){
+        // Initalize the main window
+        JFrame frame = new JFrame(getProjectName());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new GridBagLayout());
+        frame.setPreferredSize(new Dimension(1024,768));
+
+        // Add elements to the main window
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.CENTER;
+        frame.add(new JLabel("Hello world!"),constraints);
+        
+        // Display the main window
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
     /**
      * Reports the project's pretty name.
      * @return The project's pretty name.
@@ -137,6 +177,8 @@ public class Main
         System.out.println("    --preflist                   Lists all preferences that are set.");
         System.out.println("    --loglevel <level>           Sets the current logging level.");
         System.out.println("    --loglevel <logger>=<level>  Sets the logging level for the given logger.");
+        System.out.println("    --gui                        Run in graphical user interface mode.");
+        System.out.println("    --interactive                Run in interactive commandline mode.");
         System.out.println("Log Levels:");
         System.out.println("    all");
         System.out.println("    trace");
@@ -179,7 +221,9 @@ public class Main
         Logger rootlogger = Logger.getRootLogger();
         rootlogger.addAppender(new ConsoleAppender(new PatternLayout("[%-5p] %m%n")));
         rootlogger.setLevel(Level.INFO);
-        
+        boolean done=false;
+        boolean gui=false;
+        boolean interactive=false;
         int idx=0;
         while ( idx < args.length ){
             String arg = args[idx];
@@ -212,6 +256,7 @@ public class Main
                 }else{
                     setPreference(param.substring(0, eqidx),param.substring(eqidx+1));
                 }
+                done=true;
             }else if ( arg.equalsIgnoreCase("-prefget") || arg.equalsIgnoreCase("--prefget") ){
                  // Verify that there is another argument
                 if ( (idx+1) >= args.length ){
@@ -227,6 +272,7 @@ public class Main
 
                 // Print the value
                 printPreference(param);
+                done=true;
             }else if ( arg.equalsIgnoreCase("-prefdel") || arg.equalsIgnoreCase("--prefdel") ){
                  // Verify that there is another argument
                 if ( (idx+1) >= args.length ){
@@ -242,8 +288,10 @@ public class Main
 
                 // Unset the preference
                 unsetPreference(param);
+                done=true;
             }else if ( arg.equalsIgnoreCase("-preflist") || arg.equalsIgnoreCase("--preflist") ){
                 printAllPreferences();
+                done=true;
             }else if ( arg.equalsIgnoreCase("-loglevel") || arg.equalsIgnoreCase("--loglevel") ){
                  // Verify that there is another argument
                 if ( (idx+1) >= args.length ){
@@ -267,10 +315,40 @@ public class Main
             }else if ( arg.equalsIgnoreCase("-appid") || arg.equalsIgnoreCase("--appid") || arg.equalsIgnoreCase("-application-identifier") || arg.equalsIgnoreCase("--application-identifier") ){
                 printApplicationIdentifier();
                 System.exit(0);
+            }else if ( arg.equalsIgnoreCase("-interactive") || arg.equalsIgnoreCase("--interactive") ){
+                if ( gui ){
+                    _logger.fatal("Cannot specify both \"--gui\" and \"--interactive\" simultaneously.");
+                    System.exit(1);
+                }
+                if ( interactive ){
+                    _logger.warn("Option \""+arg+"\" already specified. Ignoring.");
+                }
+                interactive=true;
+            }else if ( arg.equalsIgnoreCase("-gui") || arg.equalsIgnoreCase("--gui") ){
+                if ( interactive ){
+                    _logger.fatal("Cannot specify both \"--gui\" and \"--interactive\" simultaneously.");
+                    System.exit(1);
+                }
+                if ( gui ){
+                    _logger.warn("Option \""+arg+"\" already specified. Ignoring.");
+                }
+                gui=true;
             }else{
                 _logger.warn("Unrecognized option: \""+arg+"\". Ignoring");
             }
             idx++;
+        }
+        
+        if ( !done ){
+            if ( gui ){
+                graphicalMain();
+            }else{
+                if ( interactive ){
+                    interactiveMain();
+                }else {
+                    commandlineMain();
+                }
+            }
         }
     }
 
