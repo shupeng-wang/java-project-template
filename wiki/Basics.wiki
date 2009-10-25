@@ -36,7 +36,7 @@ The "lib" folder is there as an alternative output location to "bin", in the eve
 The "build" folder is used by Maven2 as a dumping ground for intermediate output files, and the "docs" folder is the destination for generated javadoc documentation.
 
 = Building the Template =
-The best way to build the template is from the commandline. Building the project requires that you have Sun Java JDK 5+ and Apache Maven2. GNU Make is also nice to have.
+The best way to build the template is from the commandline. Building the project requires that you have Sun Java JDK 5+ and Apache Maven2. GNU Make is also nice to have. For more detailed setup instructions, see [http://sites.google.com/site/michaelsafyan/coding/resources/how-to-guides/development-environment-setup/java Java Development Setup].
 
 If you have GNU Make, just build the project with "make". You can also use "make clean" to clean the project and "make docs" to build the project's javadoc documentation. If you do not have make, you can build the project using the command "mvn package". 
 
