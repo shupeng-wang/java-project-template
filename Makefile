@@ -42,6 +42,8 @@ clean:
 	@- $(RM) ./build/*
 	@- $(RM) ./docs/*
 
+distclean: clean ;
+
 docs: doc ;
 
 javadoc: doc ;
