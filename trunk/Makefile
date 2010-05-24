@@ -8,39 +8,37 @@
 
 ######################### DEFINITIONS ############################
 
-# Define the commandline invocation of Maven2:
-MAVEN  := mvn
-
-# Define the commandline invocation for removing files and folders:
-RM     := rm -rf
-
-# Define the commandline invocation for echoing to the console
-ECHO   := echo
+# Define the commandline invocation of Maven2 if necessary:
+ifeq ($(MVN),)
+    MVN  := mvn
+endif
 
 ######################## BUILD TARGETS ###########################
 
+.PHONY: all package compile check test doc docs javadoc clean help
+
 all: 
-	@ $(MAVEN) package
+	@ $(MVN) $(MVNFLAGS) package
 
 package: 
-	@ $(MAVEN) package
+	@ $(MVN) $(MVNFLAGS) package
 
 compile: 
-	@ $(MAVEN) compile
+	@ $(MVN) $(MVNFLAGS) compile
 
 check:
-	@ $(MAVEN) test
+	@ $(MVN) $(MVNFLAGS) test
 
 test:
-	@ $(MAVEN) test
+	@ $(MVN) $(MVNFLAGS) test
 
 doc:
-	@ $(MAVEN) javadoc:javadoc
+	@ $(MVN) $(MVNFLAGS) javadoc:javadoc
 
 clean:
-	@- $(RM) ./bin/*
-	@- $(RM) ./build/*
-	@- $(RM) ./docs/*
+	@- rm -rf ./bin/*
+	@- rm -rf ./build/*
+	@- rm -rf ./docs/*
 
 distclean: clean ;
 
@@ -51,14 +49,13 @@ javadoc: doc ;
 documentation: doc ;
 
 help:
-	@ $(ECHO) "Usage   :  make <target>"
-	@ $(ECHO) "Targets :"
-	@ $(ECHO) "   all ........... Builds the project."
-	@ $(ECHO) "   package ....... Archives all *.class files."
-	@ $(ECHO) "   compile ....... Compiles all Java files."
-	@ $(ECHO) "   check ......... Builds and runs all unit tests."
-	@ $(ECHO) "   test .......... Builds and runs all unit tests."
-	@ $(ECHO) "   docs .......... Generates project documentation."
-	@ $(ECHO) "   clean ......... Removes build products."
-	@ $(ECHO) "   help .......... Prints this help message."
-
+	@ echo "Usage   :  make <target>"
+	@ echo "Targets :"
+	@ echo "   all ........... Builds the project."
+	@ echo "   package ....... Archives all *.class files."
+	@ echo "   compile ....... Compiles all Java files."
+	@ echo "   check ......... Builds and runs all unit tests."
+	@ echo "   test .......... Builds and runs all unit tests."
+	@ echo "   docs .......... Generates project documentation."
+	@ echo "   clean ......... Removes build products."
+	@ echo "   help .......... Prints this help message."
